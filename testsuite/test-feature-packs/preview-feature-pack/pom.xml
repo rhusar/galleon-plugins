@@ -109,6 +109,7 @@
       <plugin>
         <groupId>org.wildfly.galleon-plugins</groupId>
         <artifactId>wildfly-galleon-maven-plugin</artifactId>
+        <version>${project.version}</version>
         <executions>
           <execution>
             <id>feature-pack-build</id>
