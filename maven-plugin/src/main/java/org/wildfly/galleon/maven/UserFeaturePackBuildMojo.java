@@ -18,7 +18,6 @@ package org.wildfly.galleon.maven;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,9 +44,9 @@ import org.jboss.galleon.layout.FeaturePackDescriber;
 import org.jboss.galleon.layout.FeaturePackDescription;
 import org.jboss.galleon.spec.FeaturePackSpec;
 import org.jboss.galleon.universe.FeaturePackLocation;
-import org.jboss.galleon.util.ZipUtils;
 import org.wildfly.galleon.plugin.ArtifactCoords;
 import org.wildfly.galleon.plugin.WfConstants;
+import org.wildfly.galleon.plugin.ZipFileSystemManager;
 
 /**
  * This Maven Mojo is intended to be used to build feature-packs that depend on
@@ -63,7 +62,7 @@ import org.wildfly.galleon.plugin.WfConstants;
  *
  * @author Jean-Francois Denise
  */
-@Mojo(name = "build-user-feature-pack", requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "build-user-feature-pack", requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.COMPILE, threadSafe = true)
 public class UserFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
 
     private static final String WILDFLY_GALLEON_PACK_PREFIX = "wildfly-";
@@ -249,15 +248,20 @@ public class UserFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
             if (ext.equals("zip") && (!"test".equals(scope)) && (!"system".equals(scope))) {
                 Path fp = resolveArtifact(new ArtifactCoords(groupId,
                         artifactId, version, null, "zip"));
-                try (FileSystem fs = ZipUtils.newFileSystem(fp)) {
+                fpl = ZipFileSystemManager.withFileSystem(fp, fs -> {
                     if (Files.exists(fs.getPath(Constants.FEATURE_PACK_XML))) {
                         if (translateToFpl) {
-                            fpl = FeaturePackDescriber.readSpec(fp).getFPID().getLocation();
+                            try {
+                                return FeaturePackDescriber.readSpec(fp).getFPID().getLocation();
+                            } catch (ProvisioningException e) {
+                                throw new IOException("Failed to read feature pack spec", e);
+                            }
                         } else {
-                            fpl = FeaturePackLocation.fromString(groupId + ":" + artifactId + ":" + version);
+                            return FeaturePackLocation.fromString(groupId + ":" + artifactId + ":" + version);
                         }
                     }
-                }
+                    return null;
+                });
             }
         }
         return fpl;

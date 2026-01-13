@@ -63,7 +63,7 @@ import org.wildfly.galleon.plugin.WfConstants;
  *
  * @author Alexey Loubyansky
  */
-@Mojo(name = "build-feature-pack", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "build-feature-pack", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, defaultPhase = LifecyclePhase.COMPILE, threadSafe = true)
 public class WfFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
 
     private static final Pattern windowsLineEndingPattern = Pattern.compile("(?<!\\r)\\n", Pattern.MULTILINE);

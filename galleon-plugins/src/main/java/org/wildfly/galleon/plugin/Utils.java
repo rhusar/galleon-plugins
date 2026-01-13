@@ -21,8 +21,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -371,7 +369,7 @@ public class Utils {
         if(!Files.exists(target)) {
             Files.createDirectories(target);
         }
-        try (FileSystem zipFS = FileSystems.newFileSystem(artifact, (ClassLoader) null)) {
+        ZipFileSystemManager.withFileSystem(artifact, zipFS -> {
             for(Path zipRoot : zipFS.getRootDirectories()) {
                 Files.walkFileTree(zipRoot, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
                         new SimpleFileVisitor<Path>() {
@@ -408,7 +406,8 @@ public class Utils {
                             }
                         });
             }
-        }
+            return null;
+        });
     }
 
     static Map<String, String> toArtifactsMap(String str) throws ProvisioningException {
@@ -464,7 +463,7 @@ public class Utils {
         if(!Files.exists(target)) {
             Files.createDirectories(target);
         }
-        try (FileSystem zipFS = FileSystems.newFileSystem(artifact, (ClassLoader) null)) {
+        ZipFileSystemManager.withFileSystem(artifact, zipFS -> {
             for(Path zipRoot : zipFS.getRootDirectories()) {
                 Files.walkFileTree(zipRoot, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
                         new SimpleFileVisitor<Path>() {
@@ -474,9 +473,6 @@ public class Utils {
                                 String entry = dir.toString().substring(1);
                                 if(entry.isEmpty()) {
                                     return FileVisitResult.CONTINUE;
-                                }
-                                if(!entry.endsWith("/")) {
-                                    entry += '/';
                                 }
                                 final Path targetDir = target.resolve(zipRoot.relativize(dir).toString());
                                 try {
@@ -500,6 +496,7 @@ public class Utils {
                             }
                         });
             }
-        }
+            return null;
+        });
     }
 }

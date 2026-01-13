@@ -6,10 +6,6 @@ package org.wildfly.galleon.plugin.doc.generator;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystemNotFoundException;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,9 +14,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.wildfly.galleon.plugin.ZipFileSystemManager;
 
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
@@ -124,7 +120,7 @@ public class LogMessageGenerator {
      * @throws IOException if there's an error reading the JAR file
      */
     private static void processJarFile(SimpleLog log, Path file, Collection<LogMessage> messages) throws IOException {
-        try (FileSystem zipFs = zipFs(file)) {
+        ZipFileSystemManager.withFileSystem(file, zipFs -> {
             for (Path dir : zipFs.getRootDirectories()) {
                 Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
                             @Override
@@ -143,7 +139,8 @@ public class LogMessageGenerator {
                         }
                 );
             }
-        }
+            return null;
+        });
     }
 
     /**
@@ -222,26 +219,6 @@ public class LogMessageGenerator {
             return VOID_TYPE;
         }
         return descriptor;
-    }
-    /**
-     * Opens a ZIP/JAR file system for the given path.
-     *
-     * @param path the path to the ZIP/JAR file
-     * @return the file system
-     * @throws IOException if there's an error opening the file system
-     */
-    private static FileSystem zipFs(final Path path) throws IOException {
-        final Map<String, String> env = new HashMap<>();
-        env.put("create", "true");
-
-        // locate file system by using the syntax
-        // defined in java.net.JarURLConnection
-        URI uri = URI.create("jar:" + path.toUri());
-        try {
-            return FileSystems.getFileSystem(uri);
-        } catch (FileSystemNotFoundException ignore) {
-        }
-        return FileSystems.newFileSystem(uri, env);
     }
     /**
      * Appends a path to a base path, converting absolute paths to relative.

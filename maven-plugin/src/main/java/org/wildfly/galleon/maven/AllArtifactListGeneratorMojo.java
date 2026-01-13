@@ -83,7 +83,7 @@ import org.wildfly.maven.plugins.licenses.model.ProjectLicenseInfo;
  *
  * @author jdenise@redhat.com
  */
-@Mojo(name = "generate-all-artifacts-list", requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "generate-all-artifacts-list", requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.COMPILE, threadSafe = true)
 public class AllArtifactListGeneratorMojo extends AbstractMojo {
 
     @Component

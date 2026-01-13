@@ -27,8 +27,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -139,7 +137,7 @@ public class WfInstallPlugin extends ProvisioningPluginWithOptions implements In
      * If the property starts with '-', it means the property will be removed from the set, otherwise, the property will be added.
      * Values are added or removed from the default Set in the same order as they have been specified in this configuration option.
      *
-     * @see @see org.wildfly.galleon.plugin.server.ForkedEmbeddedUtil
+     * @see org.wildfly.galleon.plugin.server.ForkedEmbeddedUtil
      */
     private static final ProvisioningOption OPTION_RESET_EMBEDDED_SYSTEM_PROPERTIES = ProvisioningOption.builder("jboss-reset-embedded-system-properties")
             .build();
@@ -1107,12 +1105,13 @@ public class WfInstallPlugin extends ProvisioningPluginWithOptions implements In
     private void extractSchemas(Path moduleArtifact) throws IOException {
         final Path targetSchemasDir = this.runtime.getStagedDir().resolve(WfConstants.DOCS).resolve(WfConstants.SCHEMA);
         Files.createDirectories(targetSchemasDir);
-        try (FileSystem jarFS = FileSystems.newFileSystem(moduleArtifact, (ClassLoader) null)) {
+        ZipFileSystemManager.withFileSystem(moduleArtifact, jarFS -> {
             final Path schemaSrc = jarFS.getPath(WfConstants.SCHEMA);
             if (Files.exists(schemaSrc)) {
                 ZipUtils.copyFromZip(schemaSrc.toAbsolutePath(), targetSchemasDir);
             }
-        }
+            return null;
+        });
     }
 
     private boolean requireChannel(String artifactGA) {

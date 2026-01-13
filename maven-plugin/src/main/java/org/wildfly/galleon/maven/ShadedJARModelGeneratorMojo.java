@@ -38,7 +38,7 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.jboss.galleon.spec.PackageSpec;
 import org.jboss.galleon.xml.PackageXmlWriter;
 
-@Mojo(name = "generate-shaded-descriptor", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME)
+@Mojo(name = "generate-shaded-descriptor", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true)
 public class ShadedJARModelGeneratorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
