@@ -66,14 +66,14 @@ import org.wildfly.galleon.plugin.WfConstants;
 @Mojo(name = "build-feature-pack", requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME, defaultPhase = LifecyclePhase.COMPILE)
 public class WfFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
 
-    private static Pattern windowsLineEndingPattern = Pattern.compile("(?<!\\r)\\n", Pattern.MULTILINE);
-    private static Pattern linuxLineEndingPattern = Pattern.compile("\\r\\n", Pattern.MULTILINE);
-    private static PathFilter windowsLineEndingsPathFilter = new PathFilter() {
+    private static final Pattern windowsLineEndingPattern = Pattern.compile("(?<!\\r)\\n", Pattern.MULTILINE);
+    private static final Pattern linuxLineEndingPattern = Pattern.compile("\\r\\n", Pattern.MULTILINE);
+    private static final PathFilter windowsLineEndingsPathFilter = new PathFilter() {
         @Override
         public boolean accept(Path path) {
             return path.getFileName().toString().endsWith(".bat");
         }};
-    private static PathFilter linuxLineEndingsPathFilter = new PathFilter() {
+    private static final PathFilter linuxLineEndingsPathFilter = new PathFilter() {
             @Override
             public boolean accept(Path path) {
                 final String name = path.getFileName().toString();
