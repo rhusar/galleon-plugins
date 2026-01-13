@@ -110,14 +110,14 @@ public class WfFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
     /**
      * The artifactId for the generated feature-pack.
      */
-    @Parameter(alias="feature-pack-artifact-id", defaultValue = "${project.artifactId}", required=false)
+    @Parameter(alias="feature-pack-artifact-id", defaultValue = "${project.artifactId}")
     private String fpArtifactId;
 
     /**
      * Used only for feature spec generation and indicates whether to launch
      * the embedded server to read feature descriptions in a separate process
      */
-    @Parameter(alias = "fork-embedded", required = false)
+    @Parameter(alias = "fork-embedded")
     protected boolean forkEmbedded;
 
     /**

@@ -100,13 +100,13 @@ public class UserFeaturePackBuildMojo extends AbstractFeaturePackBuildMojo {
     /**
      * The FPL for the generated feature-pack.
      */
-    @Parameter(alias = "feature-pack-location", defaultValue = "${project.groupId}:${project.artifactId}:${project.version}", required = false)
+    @Parameter(alias = "feature-pack-location", defaultValue = "${project.groupId}:${project.artifactId}:${project.version}")
     private String fpLocation;
 
     /**
      * By default generated build config dependencies are expressed using GAV, set this parameter to true to generate FPL.
      */
-    @Parameter(alias = "translate-to-fpl", defaultValue = "false", required = false)
+    @Parameter(alias = "translate-to-fpl", defaultValue = "false")
     private Boolean translateToFpl;
 
     private WildFlyFeaturePackBuild buildConfig;

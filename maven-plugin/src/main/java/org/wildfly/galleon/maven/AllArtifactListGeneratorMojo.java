@@ -113,19 +113,19 @@ public class AllArtifactListGeneratorMojo extends AbstractMojo {
     @Parameter(alias = "feature-pack-artifact-id", required = true)
     private String fpArtifactId;
 
-    @Parameter(alias = "feature-pack-version", required = false)
+    @Parameter(alias = "feature-pack-version")
     private String fpVersion;
 
     @Parameter(alias = "offline", defaultValue = "false")
     private boolean offline;
 
-    @Parameter(alias = "extra-artifacts", readonly = false, required = false)
+    @Parameter(alias = "extra-artifacts")
     private List<ArtifactItem> extraArtifacts = Collections.emptyList();
 
-    @Parameter(alias = "output-licenses-file", readonly = false, required = false)
+    @Parameter(alias = "output-licenses-file")
     private String licensesFile;
 
-    @Parameter(alias = "excluded-licenses-versions", readonly = false, required = false)
+    @Parameter(alias = "excluded-licenses-versions")
     private String excludedVersions;
 
     @Override

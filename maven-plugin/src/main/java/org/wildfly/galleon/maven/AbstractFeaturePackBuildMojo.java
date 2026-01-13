@@ -170,7 +170,7 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * used as the source of properties during file copying tasks with property
      * replacement.
      */
-    @Parameter(alias = "task-properties-file", required = false)
+    @Parameter(alias = "task-properties-file")
     private File taskPropsFile;
 
     /**
@@ -179,14 +179,14 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * NOTE: values of this parameter will overwrite the corresponding values
      * from task-properties-file parameter, in case it's also set.<br/>
      */
-    @Parameter(alias = "task-properties", required = false)
+    @Parameter(alias = "task-properties")
     protected Map<String, String> taskProps = Collections.emptyMap();
 
     /**
      * Generates a channel manifest YAML definition when the feature-pack is produced.
      * Any dependency from the feature pack is declared as a stream in the channel manifest.
      */
-    @Parameter(alias = "generate-channel-manifest", required = false, defaultValue = "false",
+    @Parameter(alias = "generate-channel-manifest", defaultValue = "false",
             property = "wildfly.feature.pack.generate-channel-manifest")
     protected boolean generateChannelManifest;
 
@@ -194,7 +194,7 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * Add any feature-pack dependency as a required manifest in the manifest YAML definition.
      * This parameter has no effect if "generate-channel-manifest" is false.
      */
-    @Parameter(alias = "add-feature-packs-as-required-manifests", required = false, defaultValue = "true")
+    @Parameter(alias = "add-feature-packs-as-required-manifests", defaultValue = "true")
     protected boolean addFeaturePacksAsRequiredManifests;
 
     /**
@@ -205,11 +205,11 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * "REQUIRED_FP_ONLY" means that only the feature-pack must be only resolved from WildFly channels.
      * Referenced artifacts can be resolved outside of configured WildFly channels.
      */
-    @Parameter(alias = "wildfly-channel-resolution-mode", required = false, defaultValue = "NOT_REQUIRED",
+    @Parameter(alias = "wildfly-channel-resolution-mode", defaultValue = "NOT_REQUIRED",
             property = "wildfly.feature.pack.require.channel.resolution")
     protected WildFlyChannelResolutionMode wildflyChannelResolutionMode;
 
-    @Parameter(alias = "deploy-channel-manifest", required = false, defaultValue = "true",
+    @Parameter(alias = "deploy-channel-manifest", defaultValue = "true",
             property = "wildfly.feature.pack.deploy-channel-manifest")
     protected boolean deployChannelManifest;
 
@@ -228,7 +228,7 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * than the default level of the WildFly process being used for feature-spec generation.
      * It overrides the value set in the wildfly-feature-pack-build.xml file.
      */
-    @Parameter(alias = "minimum-stability-level", required = false)
+    @Parameter(alias = "minimum-stability-level")
     protected String minimumStabilityLevel;
 
     /**
@@ -236,7 +236,7 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * configuration and provision packages. Can't be used when {@code config-stability-level} or {@code package-stability-level} is set.
      * It overrides the value set in the wildfly-feature-pack-build.xml file.
      */
-    @Parameter(alias = "stability-level", required = false)
+    @Parameter(alias = "stability-level")
     protected String stabilityLevel;
 
     /**
@@ -244,13 +244,13 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * configuration. Can't be used when {@code stability-level} is set.
      * It overrides the value set in the wildfly-feature-pack-build.xml file.
      */
-    @Parameter(alias = "config-stability-level", required = false)
+    @Parameter(alias = "config-stability-level")
     protected String configStabilityLevel;
 
     /**
      * Enforce that no package at a lower stability level than the minimum-stability-level is referenced from Galleon constructs.
      */
-    @Parameter(alias = "forbid-lower-stability-level-package-reference", required = false, defaultValue = "false")
+    @Parameter(alias = "forbid-lower-stability-level-package-reference", defaultValue = "false")
     protected boolean forbidLowerStatibilityLevelPackageReference;
 
     /**
@@ -260,7 +260,7 @@ public abstract class AbstractFeaturePackBuildMojo extends AbstractMojo {
      * the level of the {@code package-stability-level} option must imply the level of the {@code config-stability-level} option.
      * It overrides the value set in the wildfly-feature-pack-build.xml file.
      */
-    @Parameter(alias = "package-stability-level", required = false)
+    @Parameter(alias = "package-stability-level")
     protected String packageStabilityLevel;
 
     @Parameter(alias = "generate-complete-model", defaultValue = "false", required = true)
